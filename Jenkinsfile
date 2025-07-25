@@ -7,12 +7,19 @@ pipeline {
 
   stages {
 
-    stage('Checkout') {
-      steps {
-        git 'https://github.com/asriemok/my-fullstack-app.git'
-      }
-    }
+//     stage('Checkout') {
+//       steps {
+//         git 'https://github.com/asriemok/my-fullstack-app.git'
+//       }
+//     }
+// //
+stage('Checkout') {
+  steps {
+    git branch: 'main', url: 'https://github.com/asriemok/my-fullstack-app.git'
+  }
+}
 
+//
     stage('Build & Run with Docker Compose') {
       steps {
         script {
