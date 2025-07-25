@@ -20,16 +20,21 @@ stage('Checkout') {
 }
 
 //
+    // stage('Build & Run with Docker Compose') {
+    //   steps {
+    //     script {
+    //       echo "Starting Docker Compose build..."
+    //       sh 'docker-compose down'
+    //       sh 'docker-compose build'
+    //       sh 'docker-compose up -d'
+    //     }
+    //   }
+    // }
     stage('Build & Run with Docker Compose') {
-      steps {
-        script {
-          echo "Starting Docker Compose build..."
-          sh 'docker-compose down'
-          sh 'docker-compose build'
-          sh 'docker-compose up -d'
-        }
-      }
+    steps {
+        sh 'docker-compose up -d --build'
     }
+}
 
     stage('Check Running Containers') {
       steps {
