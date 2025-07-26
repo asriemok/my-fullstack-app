@@ -12,15 +12,15 @@ pipeline {
       }
     }
 
-    stage('Build and Run Docker Compose') {
-      steps {
-        script {
-          echo '🛠️ Building and starting Docker containers...'
-          sh 'docker-compose down || true'       // Ensure cleanup doesn't block
-          sh 'docker-compose up -d --build'
-        }
-      }
-    }
+    // stage('Build and Run Docker Compose') {
+    //   steps {
+    //     script {
+    //       echo '🛠️ Building and starting Docker containers...'
+    //       sh 'docker-compose down || true'       // Ensure cleanup doesn't block
+    //       sh 'docker-compose up -d --build'
+    //     }
+    //   }
+    // }
 
     stage('Verify Containers') {
       steps {
@@ -30,16 +30,16 @@ pipeline {
     }
   }
 
-  post {
-    success {
-      echo '✅ Deployment successful!'
-    }
-    failure {
-      echo '❌ Build or deployment failed.'
-    }
-    always {
-      echo '🧹 Cleaning up...'
-      sh 'docker-compose down'
-    }
-  }
+  // post {
+  //   success {
+  //     echo '✅ Deployment successful!'
+  //   }
+  //   failure {
+  //     echo '❌ Build or deployment failed.'
+  //   }
+  //   always {
+  //     echo '🧹 Cleaning up...'
+  //     sh 'docker-compose down'
+  //   }
+  // }
 }
