@@ -5,10 +5,29 @@ pipeline {
     COMPOSE_PROJECT_NAME = 'myfullstackapp'
   }
 
+  options {
+    skipStagesAfterUnstable()
+    timestamps()
+  }
+
   stages {
+    stage('Workspace Cleanup') {
+      steps {
+        echo '🧹 Cleaning old workspace...'
+        deleteDir()
+      }
+    }
+
     stage('Checkout Code') {
       steps {
-        git branch: 'main', url: 'https://github.com/asriemok/my-fullstack-app.git'
+        echo '📥 Cloning repository...'
+        checkout([$class: 'GitSCM',
+          branches: [[name: '*/main']],
+          userRemoteConfigs: [[
+            url: 'https://github.com/asriemok/my-fullstack-app.git'
+            // credentialsId: 'your-credentials-id' // Uncomment if using private repo
+          ]]
+        ])
       }
     }
 
@@ -16,7 +35,7 @@ pipeline {
       steps {
         script {
           echo '🛠️ Building and starting Docker containers...'
-          sh 'docker-compose down || true'       // Ensure cleanup doesn't block
+          sh 'docker-compose down || true'
           sh 'docker-compose up -d --build'
         }
       }
@@ -38,8 +57,8 @@ pipeline {
       echo '❌ Build or deployment failed.'
     }
     always {
-      echo '🧹 Cleaning up...'
-      sh 'docker-compose down'
+      echo '🧹 Shutting down containers...'
+      sh 'docker-compose down || true'
     }
   }
 }
